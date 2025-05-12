@@ -1,29 +1,37 @@
 export class MainPage {
     constructor(page) {
         this.page = page;
+        this.iframeLocator = page.frameLocator('iframe[name="framelive"]');
     }
 
     async goto() {
         await this.page.goto('https://demo.prestashop.com/#/en/front');
-        await this.page.frameLocator('iframe[name="framelive"]').locator('body').waitFor({timeout: 15000});
+        await this.iframeLocator.locator('body').waitFor({ timeout: 15000 });
     }
 
-    getIframe() {
-        return this.page.frameLocator('iframe[name="framelive"]');
+    getNewsletterLabel() {
+        return this.iframeLocator.locator('#block-newsletter-label');
     }
 
-    async getNewsletterLabel() {
-        const iframe = this.getIframe();
-        return iframe.locator('#block-newsletter-label');
+    getUnsubscribeText() {
+        return this.iframeLocator.getByText('You may unsubscribe at any');
     }
 
-    async getUnsubscribeText() {
-        const iframe = this.getIframe();
-        return iframe.getByText('You may unsubscribe at any');
+    getSubscribeButton() {
+        return this.iframeLocator.locator('input[name="submitNewsletter"]:visible');
     }
 
-    async getSubscribeButton() {
-        const iframe = this.getIframe();
-        return iframe.getByRole('button', {name: 'Subscribe'});
+    async clickLanguageButton() {
+        const button = this.iframeLocator.getByRole('button', { name: 'Language dropdown' });
+        await button.click();
+    }
+
+    async clickSignInButton() {
+        const button = this.iframeLocator.locator('div.user-info a');
+        await button.click();
+    }
+
+    getLanguages() {
+        return this.iframeLocator.locator('ul[aria-labelledby="language-selector-label"] >> li');
     }
 }

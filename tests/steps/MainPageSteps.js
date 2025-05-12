@@ -18,6 +18,26 @@ export class MainPageSteps {
         await this.mainPage.clickSignInButton();
     }
 
+    async verifyDropDownMenu(expectedItems, categoryName) {
+        const clothes = await this.mainPage.getMenuItems(categoryName);
+        await clothes.hover();
+        const submenuItems = await this.mainPage.getSubMenuItems(categoryName);
+        const count = await submenuItems.count();
+        expect(count).toBe(expectedItems.length);
+        const texts = await submenuItems.allTextContents();
+        const trimmedTexts = texts.map(t => t.trim());
+        for (const expectedText of expectedItems) {
+            expect(trimmedTexts).toContain(expectedText);
+        }
+    }
+
+    async verifyPopularProducts(expected) {
+        const products = this.mainPage.getPopularProducts();
+        await products.first().waitFor({state: 'visible', timeout: 10000});
+        const count = await products.count();
+        expect(count).toBe(expected);
+    }
+
     async verifyLanguagesCount(expectedCount) {
         await this.openLanguageDropdown();
         const languages = await this.mainPage.getLanguages();

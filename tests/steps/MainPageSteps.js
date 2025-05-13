@@ -14,6 +14,11 @@ export class MainPageSteps {
         await this.mainPage.clickLanguageButton();
     }
 
+    async goToPriceDropPage() {
+        const link = this.mainPage.getPriceDropButton();
+        await link.click();
+    }
+
     async goToSignInScreen() {
         await this.mainPage.clickSignInButton();
     }

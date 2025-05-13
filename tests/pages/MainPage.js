@@ -17,6 +17,10 @@ export class MainPage {
         return this.iframeLocator.getByText('You may unsubscribe at any');
     }
 
+    getPriceDropButton() {
+        return this.iframeLocator.locator('a.cms-page-link[href*="prices-drop"]');
+    }
+
     getSubscribeButton() {
         return this.iframeLocator.locator('input[name="submitNewsletter"]:visible');
     }

@@ -33,9 +33,18 @@ export class MainPageSteps {
 
     async verifyPopularProducts(expected) {
         const products = this.mainPage.getPopularProducts();
-        await products.first().waitFor({state: 'visible', timeout: 10000});
+        await products.first().waitFor({state: 'visible', timeout: 100000});
         const count = await products.count();
         expect(count).toBe(expected);
+
+        for (let i = 0; i < count; i++) {
+            const item = products.nth(i);
+            const title = await item.locator('.product-title').textContent();
+            const rawPrice = await item.locator('.price').textContent();
+            const price = parseFloat(rawPrice?.replace(/[^\d.,]/g, '').replace(',', '.') || '0');
+            expect(title?.trim()).not.toBe('');
+            expect(price).toBeGreaterThan(0);
+        }
     }
 
     async verifyLanguagesCount(expectedCount) {

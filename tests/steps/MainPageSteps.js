@@ -38,7 +38,7 @@ export class MainPageSteps {
 
     async verifyPopularProducts(expected) {
         const products = this.mainPage.getPopularProducts();
-        await products.first().waitFor({state: 'visible', timeout: 100000});
+        await expect(products.first()).toBeVisible({ timeout: 100000 });
         const count = await products.count();
         expect(count).toBe(expected);
 

@@ -8,7 +8,7 @@ export class PriceDropPageSteps {
 
     async verifyProducts() {
         const products = this.priceDropPage.getProducts();
-        await products.first().waitFor({state: 'visible', timeout: 100000});
+        await expect(products.first()).toBeVisible({ timeout: 100000 });
         const count = await products.count();
 
         expect(count).toBeGreaterThan(0);

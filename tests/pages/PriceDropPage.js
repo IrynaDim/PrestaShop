@@ -1,7 +1,8 @@
-export class PriceDropPage {
+import {BasePage} from "./BasePage";
+
+export class PriceDropPage extends BasePage {
     constructor(page) {
-        this.page = page;
-        this.iframeLocator = page.frameLocator('iframe[name="framelive"]');
+        super(page);
     }
 
     async waitForIframeReady() {

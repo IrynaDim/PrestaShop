@@ -1,7 +1,8 @@
-export class SignInPage {
+import {BasePage} from "./BasePage";
+
+export class SignInPage extends BasePage {
     constructor(page) {
-        this.page = page;
-        this.iframeLocator = page.frameLocator('iframe[name="framelive"]');
+        super(page);
     }
 
     async clickSignUpButton() {

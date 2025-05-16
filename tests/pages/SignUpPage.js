@@ -1,7 +1,8 @@
-export class SignUpPage {
+import {BasePage} from "./BasePage";
+
+export class SignUpPage extends BasePage {
     constructor(page) {
-        this.page = page;
-        this.iframeLocator = page.frameLocator('iframe[name="framelive"]');
+        super(page);
     }
 
     getErrorMessages() {

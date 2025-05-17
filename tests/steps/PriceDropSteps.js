@@ -8,7 +8,7 @@ export class PriceDropPageSteps {
 
     async verifyProducts() {
         const products = this.priceDropPage.getProducts();
-        await expect(products.first()).toBeVisible({ timeout: 100000 });
+        await expect(products.first()).toBeVisible({timeout: 100000});
         const count = await products.count();
 
         expect(count).toBeGreaterThan(0);
@@ -16,11 +16,11 @@ export class PriceDropPageSteps {
         for (let i = 0; i < count; i++) {
             const item = products.nth(i);
 
-            const rawOldPrice = await item.locator('.regular-price').textContent();
-            const rawNewPrice = await item.locator('.price').textContent();
+            const rawOldPrice = await item.locator(this.priceDropPage.productRegularPriceSelector).textContent();
+            const rawNewPrice = await item.locator(this.priceDropPage.productPriceSelector).textContent();
             const oldPrice = parseFloat(rawOldPrice?.replace(/[^\d.,]/g, '').replace(',', '.') || '0');
             const newPrice = parseFloat(rawNewPrice?.replace(/[^\d.,]/g, '').replace(',', '.') || '0');
-            const rawDiscount = await item.locator('.product-flag.discount').textContent();
+            const rawDiscount = await item.locator(this.priceDropPage.productPriceDiscountSelector).textContent();
             const discount = parseFloat(rawDiscount.replace(/[^\d.]/g, ''));
 
             expect(oldPrice).toBeGreaterThan(0);

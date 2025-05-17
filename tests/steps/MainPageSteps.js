@@ -19,6 +19,11 @@ export class MainPageSteps {
         await link.click();
     }
 
+    async goToAllProductsPage() {
+        const link = this.mainPage.getAllProductsButton();
+        await link.first().click();
+    }
+
     async goToSignInScreen() {
         await this.mainPage.clickSignInButton();
     }
@@ -41,7 +46,7 @@ export class MainPageSteps {
         await expect(products.first()).toBeVisible({ timeout: 100000 });
         const count = await products.count();
         expect(count).toBe(expected);
-
+// todo move locators to the Page as string
         for (let i = 0; i < count; i++) {
             const item = products.nth(i);
             const title = await item.locator('.product-title').textContent();
@@ -78,7 +83,6 @@ export class MainPageSteps {
     }
 
     async verifySubscribeButtonIsUppercase() {
-        await this.mainPage.page.pause();
         const button = await this.mainPage.getSubscribeButton();
         const textTransform = await button.evaluate(el => getComputedStyle(el).textTransform);
         expect(textTransform).toBe('uppercase');

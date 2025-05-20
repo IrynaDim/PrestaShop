@@ -13,7 +13,10 @@ test('Check product type, amount and price in the pop up window', async ({page})
     await resultPage.clickOnProductByTitle('Brown Bear Notebook');
 
     const buyingSteps = new ProductBuyingSteps(page);
-    await buyingSteps.addItemToCart('Doted', null, 5);
+    await buyingSteps.addItemToCart({
+        type: 'Doted',
+        quantity: 5
+    });
 
     const popupSteps = new CartPopUpSteps(page);
     const type = await popupSteps.getProductPaperType();

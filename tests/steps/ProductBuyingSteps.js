@@ -5,21 +5,19 @@ export class ProductBuyingSteps {
         this.buyingPage = new ProductBuyingPage(page);
     }
 
-    async addItemToCart(type, color, amount) {
+    async addItemToCart({ type, color, quantity}) {
         if (type) {
-            const dropMenu = this.buyingPage.getPaperTypeDropMenu();
-            await dropMenu.selectOption({label: type});
+            await this.buyingPage.getPaperTypeDropMenu().selectOption({ label: type });
         }
 
         if (color) {
-            const colorOption = this.buyingPage.getColorOptionByName(color);
-            await colorOption.click();
+            await this.buyingPage.getColorOptionByName(color).click();
         }
 
-        const quantityField = this.buyingPage.getQuantityField();
-        await quantityField.fill(amount.toString());
+        if (quantity) {
+            await this.buyingPage.getQuantityField().fill(quantity.toString());
+        }
 
-        const addToCartButton = this.buyingPage.getAddToCartButton();
-        await addToCartButton.click();
+        await this.buyingPage.getAddToCartButton().click();
     }
 }

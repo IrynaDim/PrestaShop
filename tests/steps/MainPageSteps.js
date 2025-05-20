@@ -29,6 +29,12 @@ export class MainPageSteps {
         await this.mainPage.clickSignInButton();
     }
 
+    async insertTextToSearchFieldAndPressEnter(productName) {
+        const searchField = this.mainPage.getProductSearchField();
+        await searchField.fill(productName);
+        await searchField.press('Enter');
+    }
+
     async verifyDropDownMenu(expectedItems, categoryName) {
         const clothes = await this.mainPage.getMenuItems(categoryName);
         await clothes.hover();

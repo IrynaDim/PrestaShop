@@ -21,6 +21,10 @@ export class MainPage extends BasePage {
         return this.iframeLocator.getByText('You may unsubscribe at any');
     }
 
+    getProductSearchField() {
+        return this.iframeLocator.locator('.ui-autocomplete-input');
+    }
+
     getPriceDropButton() {
         return this.iframeLocator.locator('a.cms-page-link[href*="prices-drop"]');
     }

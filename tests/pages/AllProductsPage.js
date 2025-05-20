@@ -7,6 +7,7 @@ export class AllProductsPage extends BasePage {
 
     productTitleSelector = 'h2.h3.product-title > a';
     productPriceSelector = '.price';
+    productRegularPriceSelector = '.regular-price';
 
     async clickSortByDropSection() {
         const button = this.iframeLocator.locator('.btn-unstyle.select-title');

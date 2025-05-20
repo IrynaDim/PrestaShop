@@ -1,5 +1,6 @@
 import {MainPage} from '../pages/MainPage';
 import {expect} from '@playwright/test';
+import {PriceParser} from '../util/PriceParser';
 
 export class MainPageSteps {
     constructor(page) {
@@ -43,15 +44,15 @@ export class MainPageSteps {
 
     async verifyPopularProducts(expected) {
         const products = this.mainPage.getPopularProducts();
-        await expect(products.first()).toBeVisible({ timeout: 100000 });
+        await expect(products.first()).toBeVisible({timeout: 100000});
         const count = await products.count();
         expect(count).toBe(expected);
-// todo move locators to the Page as string
+
         for (let i = 0; i < count; i++) {
             const item = products.nth(i);
-            const title = await item.locator('.product-title').textContent();
-            const rawPrice = await item.locator('.price').textContent();
-            const price = parseFloat(rawPrice?.replace(/[^\d.,]/g, '').replace(',', '.') || '0');
+            const title = await item.locator(this.mainPage.productTitleSelector).textContent();
+            const rawPrice = await item.locator(this.mainPage.productPriceSelector).textContent();
+            const price = PriceParser.parse(rawPrice);
             expect(title?.trim()).not.toBe('');
             expect(price).toBeGreaterThan(0);
         }

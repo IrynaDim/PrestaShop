@@ -5,6 +5,9 @@ export class MainPage extends BasePage {
         super(page);
     }
 
+    productTitleSelector = '.product-title';
+    productPriceSelector = '.price';
+
     async goto() {
         await this.page.goto('https://demo.prestashop.com/#/en/front');
         await this.iframeLocator.locator('body').waitFor({timeout: 15000});

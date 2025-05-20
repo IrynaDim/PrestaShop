@@ -1,5 +1,6 @@
 import {PriceDropPage} from '../pages/PriceDropPage';
 import {expect} from '@playwright/test';
+import {PriceParser} from '../util/PriceParser';
 
 export class PriceDropPageSteps {
     constructor(page) {
@@ -18,10 +19,10 @@ export class PriceDropPageSteps {
 
             const rawOldPrice = await item.locator(this.priceDropPage.productRegularPriceSelector).textContent();
             const rawNewPrice = await item.locator(this.priceDropPage.productPriceSelector).textContent();
-            const oldPrice = parseFloat(rawOldPrice?.replace(/[^\d.,]/g, '').replace(',', '.') || '0');
-            const newPrice = parseFloat(rawNewPrice?.replace(/[^\d.,]/g, '').replace(',', '.') || '0');
+            const oldPrice = PriceParser.parse(rawOldPrice);
+            const newPrice = PriceParser.parse(rawNewPrice);
             const rawDiscount = await item.locator(this.priceDropPage.productPriceDiscountSelector).textContent();
-            const discount = parseFloat(rawDiscount.replace(/[^\d.]/g, ''));
+            const discount = PriceParser.parse(rawDiscount);
 
             expect(oldPrice).toBeGreaterThan(0);
             expect(newPrice).toBeGreaterThan(0);

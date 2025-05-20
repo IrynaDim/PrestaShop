@@ -46,7 +46,6 @@ export class SignUpPageSteps {
     }
 
     async verifyFirstNameFieldInvalid() {
-        debugger;
         const errorMessages = this.signUpPage.getErrorMessages();
         await expect(errorMessages).toContainText('Invalid format.');
     }

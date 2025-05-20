@@ -1,4 +1,5 @@
 import {AllProductsPage} from '../pages/AllProductsPage';
+import {PriceParser} from '../util/PriceParser';
 import {expect} from '@playwright/test';
 
 export class AllProductsSteps {
@@ -27,10 +28,16 @@ export class AllProductsSteps {
             const item = productsLocator.nth(i);
 
             const rawTitle = await item.locator(this.productsPage.productTitleSelector).textContent();
-            const rawPrice = await item.locator(this.productsPage.productPriceSelector).textContent();
+
+            // Checking whether product has regular price before discount
+            const hasDiscount = await item.locator(this.productsPage.productRegularPriceSelector).count() > 0;
+            const rawPrice = await (hasDiscount
+                    ? item.locator('.regular-price')
+                    : item.locator(this.productsPage.productPriceSelector)
+            ).textContent();
 
             const title = rawTitle?.trim();
-            const price = parseFloat(rawPrice?.replace(/[^\d.,]/g, '').replace(',', '.') || '0');
+            const price = PriceParser.parse(rawPrice);
 
             products.push({title, price});
         }

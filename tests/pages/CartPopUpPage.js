@@ -20,4 +20,12 @@ export class CartPopUpPage extends BasePage {
     getPopUpTitle() {
         return this.iframeLocator.locator('h4.modal-title');
     }
+
+    getContinueShoppingButton() {
+        return this.iframeLocator.locator('div.cart-content-btn >> button.btn-secondary');
+    }
+
+    getProceedToCheckOutButton() {
+        return this.iframeLocator.locator('div.cart-content-btn >> a.btn-primary');
+    }
 }

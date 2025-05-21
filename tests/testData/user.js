@@ -8,3 +8,13 @@ export const invalidUserFirstName = {
     agreeOffers: true,
     agreeTerms: true
 };
+
+export const completeOrderPersonalInfo = {
+    gender: 'Mrs',
+    firstName: 'Anna',
+    lastName: 'Smith',
+    email: 'anna@example.com',
+    birthdate: '01/01/1990',
+    agreeDataPrivacy: true,
+    agreeTerms: true
+};

@@ -20,4 +20,14 @@ export class CartPopUpSteps {
     async getPopUpText() {
         return (await this.popupPage.getPopUpTitle().textContent())?.replace(/[^\x20-\x7E]/g, '').trim();
     }
+
+    async clickContinueShopping() {
+        const button = this.popupPage.getContinueShoppingButton();
+        await button.click();
+    }
+
+    async clickProceedToCheckOut() {
+        const button = this.popupPage.getProceedToCheckOutButton();
+        await button.click();
+    }
 }

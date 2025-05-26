@@ -4,66 +4,88 @@ import {AllProductsSteps} from '../../steps/AllProductsSteps';
 
 test('Verify sorting by name A to Z', async ({page}) => {
     const mainPageSteps = new MainPageSteps(page);
-    await mainPageSteps.openMainPage();
-    await mainPageSteps.goToAllProductsPage();
-
     const allProductsSteps = new AllProductsSteps(page);
-    const products = await allProductsSteps.getProductsBySorting("Name, A to Z");
 
-    expect(products.length).toBeGreaterThan(0);
+    await test.step('Open main page and navigate to All Products page', async () => {
+        await mainPageSteps.openMainPage();
+        await mainPageSteps.goToAllProductsPage();
+    });
 
-    const titles = products.map(p => p.title);
-    const sortedTitles = [...titles].sort((a, b) => a.localeCompare(b));
+    let products;
+    await test.step('Sort products by name A to Z', async () => {
+        products = await allProductsSteps.getProductsBySorting("Name, A to Z");
+    });
 
-    expect(titles).toEqual(sortedTitles);
+    await test.step('Verify product titles are sorted A to Z', async () => {
+        expect(products.length).toBeGreaterThan(0);
+        const titles = products.map(p => p.title);
+        const sortedTitles = [...titles].sort((a, b) => a.localeCompare(b));
+        expect(titles).toEqual(sortedTitles);
+    });
 });
 
 test('Verify sorting by name Z to A', async ({page}) => {
     const mainPageSteps = new MainPageSteps(page);
-    await mainPageSteps.openMainPage();
-    await mainPageSteps.goToAllProductsPage();
-
     const allProductsSteps = new AllProductsSteps(page);
-    const products = await allProductsSteps.getProductsBySorting("Name, Z to A");
 
-    expect(products.length).toBeGreaterThan(0);
+    await test.step('Open main page and navigate to All Products page', async () => {
+        await mainPageSteps.openMainPage();
+        await mainPageSteps.goToAllProductsPage();
+    });
 
-    const titles = products.map(p => p.title);
-    const sortedTitles = [...titles].sort((a, b) => b.localeCompare(a));
+    let products;
+    await test.step('Sort products by name Z to A', async () => {
+        products = await allProductsSteps.getProductsBySorting("Name, Z to A");
+    });
 
-    expect(titles).toEqual(sortedTitles);
+    await test.step('Verify product titles are sorted Z to A', async () => {
+        expect(products.length).toBeGreaterThan(0);
+        const titles = products.map(p => p.title);
+        const sortedTitles = [...titles].sort((a, b) => b.localeCompare(a));
+        expect(titles).toEqual(sortedTitles);
+    });
 });
 
 test('Verify sorting by Price, low to high', async ({page}) => {
     const mainPageSteps = new MainPageSteps(page);
-    await mainPageSteps.openMainPage();
-    await mainPageSteps.goToAllProductsPage();
-
     const allProductsSteps = new AllProductsSteps(page);
-    const products = await allProductsSteps.getProductsBySorting("Price, low to high");
 
-    expect(products.length).toBeGreaterThan(0);
+    await test.step('Open main page and navigate to All Products page', async () => {
+        await mainPageSteps.openMainPage();
+        await mainPageSteps.goToAllProductsPage();
+    });
 
-    const prices = products.map(p => p.price);
-    const sortedPrices = [...prices].sort((a, b) => a - b);
+    let products;
+    await test.step('Sort products by price: low to high', async () => {
+        products = await allProductsSteps.getProductsBySorting("Price, low to high");
+    });
 
-    expect(prices).toEqual(sortedPrices);
+    await test.step('Verify product prices are sorted low to high', async () => {
+        expect(products.length).toBeGreaterThan(0);
+        const prices = products.map(p => p.price);
+        const sortedPrices = [...prices].sort((a, b) => a - b);
+        expect(prices).toEqual(sortedPrices);
+    });
 });
-
 
 test('Verify sorting by Price, high to low', async ({page}) => {
     const mainPageSteps = new MainPageSteps(page);
-    await mainPageSteps.openMainPage();
-    await mainPageSteps.goToAllProductsPage();
-
     const allProductsSteps = new AllProductsSteps(page);
-    const products = await allProductsSteps.getProductsBySorting("Price, high to low");
 
-    expect(products.length).toBeGreaterThan(0);
+    await test.step('Open main page and navigate to All Products page', async () => {
+        await mainPageSteps.openMainPage();
+        await mainPageSteps.goToAllProductsPage();
+    });
 
-    const prices = products.map(p => p.price);
-    const sortedPrices = [...prices].sort((a, b) => b - a);
+    let products;
+    await test.step('Sort products by price: high to low', async () => {
+        products = await allProductsSteps.getProductsBySorting("Price, high to low");
+    });
 
-    expect(prices).toEqual(sortedPrices);
+    await test.step('Verify product prices are sorted high to low', async () => {
+        expect(products.length).toBeGreaterThan(0);
+        const prices = products.map(p => p.price);
+        const sortedPrices = [...prices].sort((a, b) => b - a);
+        expect(prices).toEqual(sortedPrices);
+    });
 });
-

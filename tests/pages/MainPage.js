@@ -5,6 +5,9 @@ export class MainPage extends BasePage {
         super(page);
     }
 
+    productTitleSelector = '.product-title';
+    productPriceSelector = '.price';
+
     async goto() {
         await this.page.goto('https://demo.prestashop.com/#/en/front');
         await this.iframeLocator.locator('body').waitFor({timeout: 15000});
@@ -16,6 +19,10 @@ export class MainPage extends BasePage {
 
     getUnsubscribeText() {
         return this.iframeLocator.getByText('You may unsubscribe at any');
+    }
+
+    getProductSearchField() {
+        return this.iframeLocator.locator('.ui-autocomplete-input');
     }
 
     getPriceDropButton() {
@@ -40,18 +47,14 @@ export class MainPage extends BasePage {
         return this.iframeLocator.locator('ul[aria-labelledby="language-selector-label"] >> li');
     }
 
-    getPopularProductTitles() {
-        return this.iframeLocator.locator('.product-title');
+    getAllProductsButton() {
+        return this.iframeLocator.locator('.all-product-link');
     }
 
     getPopularProducts() {
         return this.iframeLocator.locator(
             'xpath=//div[contains(@class, "products") and contains(@class, "row")]//article[contains(@class, "product-miniature")]'
         );
-    }
-
-    waitForIframeReady() {
-        return this.iframeLocator.locator('body').waitFor({state: 'visible', timeout: 10000});
     }
 
     getMenuItems(categoryName) {

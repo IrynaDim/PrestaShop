@@ -1,5 +1,5 @@
 import {MainPage} from '../pages/MainPage';
-import {expect} from '@playwright/test';
+import {PriceParser} from '../util/PriceParser';
 
 export class MainPageSteps {
     constructor(page) {
@@ -19,68 +19,65 @@ export class MainPageSteps {
         await link.click();
     }
 
+    async goToAllProductsPage() {
+        const link = this.mainPage.getAllProductsButton();
+        await link.first().click();
+    }
+
     async goToSignInScreen() {
         await this.mainPage.clickSignInButton();
     }
 
-    async verifyDropDownMenu(expectedItems, categoryName) {
-        const clothes = await this.mainPage.getMenuItems(categoryName);
-        await clothes.hover();
-        const submenuItems = await this.mainPage.getSubMenuItems(categoryName);
-        const count = await submenuItems.count();
-        expect(count).toBe(expectedItems.length);
-        const texts = await submenuItems.allTextContents();
-        const trimmedTexts = texts.map(t => t.trim());
-        for (const expectedText of expectedItems) {
-            expect(trimmedTexts).toContain(expectedText);
-        }
+    async insertTextToSearchFieldAndPressEnter(productName) {
+        const searchField = this.mainPage.getProductSearchField();
+        await searchField.fill(productName);
+        await searchField.press('Enter');
     }
 
-    async verifyPopularProducts(expected) {
-        const products = this.mainPage.getPopularProducts();
-        await expect(products.first()).toBeVisible({ timeout: 100000 });
-        const count = await products.count();
-        expect(count).toBe(expected);
+    async getDropDownMenuItems(categoryName) {
+        const category = await this.mainPage.getMenuItems(categoryName);
+        await category.hover();
+        const submenuItems = await this.mainPage.getSubMenuItems(categoryName);
+        const texts = await submenuItems.allTextContents();
+        return texts.map(t => t.trim());
+    }
 
+    async getPopularProductsInfo() {
+        const products = this.mainPage.getPopularProducts();
+        await products.first().waitFor({timeout: 10000});
+        const count = await products.count();
+
+        const result = [];
         for (let i = 0; i < count; i++) {
             const item = products.nth(i);
-            const title = await item.locator('.product-title').textContent();
-            const rawPrice = await item.locator('.price').textContent();
-            const price = parseFloat(rawPrice?.replace(/[^\d.,]/g, '').replace(',', '.') || '0');
-            expect(title?.trim()).not.toBe('');
-            expect(price).toBeGreaterThan(0);
+            const title = await item.locator(this.mainPage.productTitleSelector).textContent();
+            const rawPrice = await item.locator(this.mainPage.productPriceSelector).textContent();
+            const price = PriceParser.parse(rawPrice);
+            result.push({ title: title?.trim(), price });
         }
+
+        return result;
     }
 
-    async verifyLanguagesCount(expectedCount) {
+    async getLanguagesList() {
         await this.openLanguageDropdown();
         const languages = await this.mainPage.getLanguages();
-        const count = await languages.count();
-        expect(count).toBe(expectedCount);
+        const texts = await languages.allTextContents();
+        return texts.map(text => text.trim());
     }
 
-    async verifyLanguageExist(language) {
-        await this.openLanguageDropdown();
-        const languageElements = await this.mainPage.getLanguages();
-        const rawTexts = await languageElements.allTextContents();
-        const languageTexts = rawTexts.map(text => text.trim());
-        expect(languageTexts).toContain(language);
-    }
-
-    async verifyNewsletterLabel(expectedText = 'Get our latest news and special sales') {
+    async getNewsletterLabelText() {
         const label = await this.mainPage.getNewsletterLabel();
-        await expect(label).toHaveText(expectedText);
+        return label.textContent();
     }
 
-    async verifyUnsubscribeText(expectedText = 'You may unsubscribe at any moment. For that purpose, please find our contact info in the legal notice.') {
+    async getUnsubscribeText() {
         const text = await this.mainPage.getUnsubscribeText();
-        await expect(text).toHaveText(expectedText);
+        return text.textContent();
     }
 
-    async verifySubscribeButtonIsUppercase() {
-        await this.mainPage.page.pause();
+    async getSubscribeButtonTextTransform() {
         const button = await this.mainPage.getSubscribeButton();
-        const textTransform = await button.evaluate(el => getComputedStyle(el).textTransform);
-        expect(textTransform).toBe('uppercase');
+        return button.evaluate(el => getComputedStyle(el).textTransform);
     }
 }

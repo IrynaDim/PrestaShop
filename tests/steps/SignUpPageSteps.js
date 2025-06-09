@@ -1,5 +1,4 @@
 import {SignUpPage} from '../pages/SignUpPage';
-import {expect} from '@playwright/test';
 
 export class SignUpPageSteps {
     constructor(page) {
@@ -45,9 +44,8 @@ export class SignUpPageSteps {
         await this.signUpPage.submitForm();
     }
 
-    async verifyFirstNameFieldInvalid() {
-        debugger;
+    async getFirstNameFieldErrorText() {
         const errorMessages = this.signUpPage.getErrorMessages();
-        await expect(errorMessages).toContainText('Invalid format.');
+        return await errorMessages.textContent();
     }
 }

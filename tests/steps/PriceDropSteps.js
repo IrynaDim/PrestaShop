@@ -1,32 +1,32 @@
 import {PriceDropPage} from '../pages/PriceDropPage';
-import {expect} from '@playwright/test';
+import {PriceParser} from '../util/PriceParser';
 
 export class PriceDropPageSteps {
     constructor(page) {
         this.priceDropPage = new PriceDropPage(page);
     }
 
-    async verifyProducts() {
+    async getPriceDropProducts() {
         const products = this.priceDropPage.getProducts();
-        await expect(products.first()).toBeVisible({ timeout: 100000 });
+        await products.first().waitFor({ timeout: 10000 });
         const count = await products.count();
 
-        expect(count).toBeGreaterThan(0);
+        const result = [];
 
         for (let i = 0; i < count; i++) {
             const item = products.nth(i);
 
-            const rawOldPrice = await item.locator('.regular-price').textContent();
-            const rawNewPrice = await item.locator('.price').textContent();
-            const oldPrice = parseFloat(rawOldPrice?.replace(/[^\d.,]/g, '').replace(',', '.') || '0');
-            const newPrice = parseFloat(rawNewPrice?.replace(/[^\d.,]/g, '').replace(',', '.') || '0');
-            const rawDiscount = await item.locator('.product-flag.discount').textContent();
-            const discount = parseFloat(rawDiscount.replace(/[^\d.]/g, ''));
+            const rawOldPrice = await item.locator(this.priceDropPage.productRegularPriceSelector).textContent();
+            const rawNewPrice = await item.locator(this.priceDropPage.productPriceSelector).textContent();
+            const rawDiscount = await item.locator(this.priceDropPage.productPriceDiscountSelector).textContent();
 
-            expect(oldPrice).toBeGreaterThan(0);
-            expect(newPrice).toBeGreaterThan(0);
-            const calculatedPrice = oldPrice * (100 - discount) / 100;
-            expect(newPrice).toBeCloseTo(calculatedPrice, 2);
+            const oldPrice = PriceParser.parse(rawOldPrice);
+            const newPrice = PriceParser.parse(rawNewPrice);
+            const discount = PriceParser.parseDiscount(rawDiscount);
+
+            result.push({ oldPrice, newPrice, discount });
         }
+
+        return result;
     }
 }

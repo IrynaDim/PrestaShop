@@ -1,16 +1,21 @@
-import {expect, test} from '@playwright/test';
-import {MainPageSteps} from '../../steps/MainPageSteps';
-import {AllProductsSteps} from '../../steps/AllProductsSteps';
+import { expect, test } from '@playwright/test';
+import { MainPageSteps } from '../../steps/MainPageSteps';
+import { AllProductsSteps } from '../../steps/AllProductsSteps';
 
-test('Verify sorting by name A to Z', async ({page}) => {
-    const mainPageSteps = new MainPageSteps(page);
-    const allProductsSteps = new AllProductsSteps(page);
+let mainPageSteps;
+let allProductsSteps;
+
+test.beforeEach(async ({ page }) => {
+    mainPageSteps = new MainPageSteps(page);
+    allProductsSteps = new AllProductsSteps(page);
 
     await test.step('Open main page and navigate to All Products page', async () => {
         await mainPageSteps.openMainPage();
         await mainPageSteps.goToAllProductsPage();
     });
+});
 
+test('Verify sorting by name A to Z', async () => {
     let products;
     await test.step('Sort products by name A to Z', async () => {
         products = await allProductsSteps.getProductsBySorting("Name, A to Z");
@@ -24,15 +29,7 @@ test('Verify sorting by name A to Z', async ({page}) => {
     });
 });
 
-test('Verify sorting by name Z to A', async ({page}) => {
-    const mainPageSteps = new MainPageSteps(page);
-    const allProductsSteps = new AllProductsSteps(page);
-
-    await test.step('Open main page and navigate to All Products page', async () => {
-        await mainPageSteps.openMainPage();
-        await mainPageSteps.goToAllProductsPage();
-    });
-
+test('Verify sorting by name Z to A', async () => {
     let products;
     await test.step('Sort products by name Z to A', async () => {
         products = await allProductsSteps.getProductsBySorting("Name, Z to A");
@@ -46,15 +43,7 @@ test('Verify sorting by name Z to A', async ({page}) => {
     });
 });
 
-test('Verify sorting by Price, low to high', async ({page}) => {
-    const mainPageSteps = new MainPageSteps(page);
-    const allProductsSteps = new AllProductsSteps(page);
-
-    await test.step('Open main page and navigate to All Products page', async () => {
-        await mainPageSteps.openMainPage();
-        await mainPageSteps.goToAllProductsPage();
-    });
-
+test('Verify sorting by Price, low to high', async () => {
     let products;
     await test.step('Sort products by price: low to high', async () => {
         products = await allProductsSteps.getProductsBySorting("Price, low to high");
@@ -68,15 +57,7 @@ test('Verify sorting by Price, low to high', async ({page}) => {
     });
 });
 
-test('Verify sorting by Price, high to low', async ({page}) => {
-    const mainPageSteps = new MainPageSteps(page);
-    const allProductsSteps = new AllProductsSteps(page);
-
-    await test.step('Open main page and navigate to All Products page', async () => {
-        await mainPageSteps.openMainPage();
-        await mainPageSteps.goToAllProductsPage();
-    });
-
+test('Verify sorting by Price, high to low', async () => {
     let products;
     await test.step('Sort products by price: high to low', async () => {
         products = await allProductsSteps.getProductsBySorting("Price, high to low");
